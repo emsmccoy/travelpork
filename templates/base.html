@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}TravelPork{% endblock %}</title>
+  {% load static %}
+  <!-- this loads on every page -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  <!-- specific styles for the rest of pages -->
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  {% block content %}
+  {% endblock %}
+</body>
+</html>

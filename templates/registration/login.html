@@ -1,7 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head><title>Login</title></head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - TravelPork{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block content %}
     <h2>Welcome to TravelPork!</h2>
     {% if form.errors %}
         <p style="color: red;">Your username and password didn't match. Please try again.</p>
@@ -21,5 +26,4 @@
         <input type="submit" value="Login" />
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
-</body>
-</html>
+{% endblock %}
