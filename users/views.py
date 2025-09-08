@@ -12,12 +12,13 @@ def home(request):
 
 @login_required
 def dashboard_redirect(request):
-    if request.user.groups.filter(name='Approvers').exists():
-        return redirect('approver_dashboard')
-    elif request.user.groups.filter(name='Travellers').exists():
-        return redirect('traveller_dashboard')
+    user = request.user
+    if user.is_traveller():
+        return redirect('users:traveller_dashboard')
+    elif user.is_approver():
+        return redirect('users:approver_dashboard')
     else:
-        return redirect('default_dashboard')
+        return redirect('users:default_dashboard')
     
 @login_required
 def approver_dashboard(request):
