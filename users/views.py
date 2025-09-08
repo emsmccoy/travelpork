@@ -17,12 +17,12 @@ def dashboard_redirect(request):
     
 @login_required
 def approver_dashboard(request):
-    return render(request, 'approver_dashboard.html')
+    return render(request, 'dashboard/approver_dashboard.html')
 
 @login_required
 def traveller_dashboard(request):
-    return render(request, 'traveller_dashboard.html')
+    return render(request, 'dashboard/traveller_dashboard.html')
 
 @login_required
 def default_dashboard(request):
-    return render(request, 'default_dashboard.html')
+    return render(request, 'dashboard/default_dashboard.html')
