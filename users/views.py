@@ -8,20 +8,13 @@ def home(request):
 
 @login_required
 def dashboard_redirect(request):
-    if request.user.groups.filter(name='Approvers').exists():
-        return redirect('approver_dashboard')
-    elif request.user.groups.filter(name='Travellers').exists():
-        return redirect('traveller_dashboard')
+    user = request.user
+    if user.is_traveller():
+        return redirect('expenses:expense_list')
+    elif user.is_approver():
+        return redirect('expenses:expense_list')
     else:
         return redirect('default_dashboard')
-    
-@login_required
-def approver_dashboard(request):
-    return render(request, 'dashboard/approver_dashboard.html')
-
-@login_required
-def traveller_dashboard(request):
-    return render(request, 'dashboard/traveller_dashboard.html')
 
 @login_required
 def default_dashboard(request):
