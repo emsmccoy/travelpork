@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from .models import Expense
 
 # Create your views here.
-@login_required 
+@login_required
 def expense_list(request: HttpRequest):
     user = request.user
     if user.is_traveller():
