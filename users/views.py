@@ -14,13 +14,11 @@ def home(request):
 def dashboard_redirect(request):
     user = request.user
     if user.is_traveller():
-        return redirect('expenses:expense_list')
+        return redirect('users:traveller_dashboard')
     elif user.is_approver():
-        return redirect('expenses:expense_list')
+        return redirect('users:approver_dashboard')
     else:
-        return redirect('default_dashboard')
-<<<<<<< HEAD
-=======
+        return redirect('users:default_dashboard')
     
 @login_required
 def approver_dashboard(request):
@@ -56,7 +54,6 @@ def traveller_dashboard(request):
         'form': form,
     }
     return render(request, 'dashboard/traveller_dashboard.html', context)
->>>>>>> f3295f1 (Add traveller dashboard)
 
 @login_required
 def default_dashboard(request):

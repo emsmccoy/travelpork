@@ -23,9 +23,6 @@ urlpatterns = [
     path('', auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('redirect/', user_views.dashboard_redirect, name='dashboard_redirect'),
-    path('traveller-dashboard/', user_views.traveller_dashboard, name='traveller_dashboard'),
-    path('approver-dashboard/', user_views.approver_dashboard, name='approver_dashboard'),
-    path('default-dashboard/', user_views.default_dashboard, name='default_dashboard'),
+    path('users/', include('users.urls')),
     path('expenses/', include('expenses.urls')),
 ]
