@@ -4,6 +4,7 @@
 {% block extra_css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/traveller_dashboard.css' %}">
 {% endblock %}
+
 {% block content %}
 <div class="header">
   <div class="header-left">
@@ -13,7 +14,9 @@
     <span class="welcome-text">Welcome back, {{ user.email }}</span>
     <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
   </div>
+
 </div>
+
 <div class="dashboard-container">
   {% if messages %}
     {% for message in messages %}
@@ -24,9 +27,10 @@
     <h2 class="page-title">Traveller Dashboard</h2>
     <p class="page-subtitle">Track your travel expenses and manage your adventure budget.</p>
   </div>
+
   <div class="action-cards-grid">
     <div class="action-card action-card-orange">
-      <h3 class="action-card-title">:moneybag: Quick Summary</h3>
+      <h3 class="action-card-title">💰 Quick Summary</h3>
       <div class="summary-stats">
         <p>Total Expenses: {{ stats.total_expenses }}</p>
         <p>Total Amount: ${{ stats.total_amount|floatformat:2 }}</p>
@@ -34,18 +38,19 @@
       </div>
     </div>
     <div class="action-card action-card-green">
-      <h3 class="action-card-title">:heavy_plus_sign: Add New Expense</h3>
+      <h3 class="action-card-title">+ Add New Expense</h3>
       <p class="action-card-description">Create a detailed expense record with preview and summary</p>
     </div>
     <a href="{% url 'expenses:traveller_expense_list' %}" class="action-card action-card-pink">
-      <h3 class="action-card-title">:clipboard: Manage All Expenses</h3>
+      <h3 class="action-card-title">📋 Manage All Expenses</h3>
       <p class="action-card-description">View, edit, and organize your complete expense list</p></a>
     <div class="action-card action-card-purple">
-      <h3 class="action-card-title">:white_check_mark: Approver Dashboard</h3>
+      <h3 class="action-card-title">✅ Approver Dashboard</h3>
       <p class="action-card-description">Review and approve pending expenses from all users</p>
     </div>
   </div>
-  <!-- Add Expense Form -->
+
+  <!-- Form for adding New Expense-->
   <div class="quick-add-section">
     <h3 class="section-title">Add Expense</h3>
     <div class="quick-add-form-container">

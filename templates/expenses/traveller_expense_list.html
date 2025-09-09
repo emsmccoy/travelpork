@@ -1,20 +1,76 @@
-<h1>Expenses list</h1>
+{% extends "base.html" %}
+{% load static %}
 
-{% if expenses %}
-    {% for expense in expenses %}
-    Expense ID: {{ expense.id }}<br>
-    {% if user_type == 'approver' %}
-    Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.second_name }}<br>
-    {% endif %}
-    Date: {{ expense.date }}<br> 
-    Amount: {{ expense.amount }}<br>
-    Category: {{ expense.category }}<br>
-    Description: {{ expense.description }}<br>
-    {% if expense.approvers_comment %}
-    Approver's comment: {{ expense.approvers_comment }}<br>
-    {% endif %}
-    Status: {{ expense.status }}<br><br>    
-    {% endfor %}
-{% else %}
+{% block title %}List of Expenses - Traveller {% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/expense_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="header">
+  <div class="header-left">
+    <h1>Travelpork</h1>
+  </div>
+  <div class="header-right">
+    <span class="welcome-text">Welcome back, {{ user.email }}</span>
+    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+  </div>
+
+</div>
+
+<div class="content-container">
+  
+  <div class="page-nav">
+    <a href="{% url 'users:traveller_dashboard' %}" class="back-link">← Back to Dashboard</a>
+    <div class="page-info">
+      <h2>List of Expenses</h2>
+      <p>Manage and organize all your travel expenses.</p>
+    </div>
+    <div class="page-actions">
+      <a href="{% url 'users:traveller_dashboard' %}" class="btn btn-primary">+ Add New Expense</a>
+    </div>
+  </div>
+  
+  {% if expenses %}
+  <div class="table-container">
+    <h3>Your Travel Expenses ({{ expenses.count }} total)</h3>
+    
+    <table class="expenses-table">
+      <thead>
+        <tr>
+          <th>Date </th>
+          <th>Amount </th>
+          <th>Category </th>
+          <th>Status </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for expense in expenses %}
+        <tr>
+          <td>{{ expense.date|date:"d/m/Y" }}</td>
+          <td>${{ expense.amount|floatformat:2 }}</td>
+          <td>
+            <span class="category-tag category-{{ expense.category|lower }}">
+              {{ expense.get_category_display }}
+            </span>
+          </td>
+          
+          <td>
+            <span class="status-badge status-{{ expense.status|lower }}">
+              {{ expense.get_status_display }}
+            </span>
+          </td>
+          
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
     <p>No expenses to display</p>
-{% endif %}
+    <a href="{% url 'users:traveller_dashboard' %}" class="btn btn-primary">Add Your First Expense<a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
