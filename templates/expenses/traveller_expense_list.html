@@ -28,7 +28,7 @@
       <p>Manage and organize all your travel expenses.</p>
     </div>
     <div class="page-actions">
-      <a href="{% url 'users:traveller_dashboard' %}" class="btn btn-primary">+ Add New Expense</a>
+      <a href="{% url 'expenses:create_expense' %}" class="btn btn-primary">+ Add New Expense</a>
     </div>
   </div>
   
@@ -69,7 +69,7 @@
   {% else %}
   <div class="empty-state">
     <p>No expenses to display</p>
-    <a href="{% url 'users:traveller_dashboard' %}" class="btn btn-primary">Add Your First Expense<a>
+    <a href="{% url 'expenses:create_expense' %}" class="btn btn-primary">Add Your First Expense<a>
   </div>
   {% endif %}
 </div>
