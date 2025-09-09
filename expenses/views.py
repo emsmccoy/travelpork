@@ -17,7 +17,6 @@ def expense_list_traveller(request):
 @login_required
 def expense_list_approver(request):
     filter_type = request.GET.get('filter', 'new')
-     # NEW: Calculate stats for the dashboard cards, like we did with Traveller
     all_expenses = Expense.objects.all()
     stats = {
         'pending_count': all_expenses.filter(status='pending').count(),
@@ -25,7 +24,6 @@ def expense_list_approver(request):
         'reimbursed_count': all_expenses.filter(status='reimbursed').count(),
         'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
     }
-    
     if filter_type == 'past':
         expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
         page_title = 'Past expenses'
@@ -57,6 +55,7 @@ def create_expense(request):
     }
     return render(request, 'expenses/create_expense.html', context)
 
+@login_required
 def expense_detail(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     user = request.user
@@ -70,36 +69,45 @@ def expense_detail(request, expense_id):
     }
     return render(request, 'expenses/expense_detail.html', context)
 
+from expenses.forms import ExpenseForm  # Make sure to import your form
+
 @login_required
-def traveller_expense_edit(request, expense_id):
+def expense_edit_traveller(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     if expense.user_id != request.user or not request.user.is_traveller():
         return redirect('expenses:expense_detail', expense_id=expense_id)
     if expense.status != 'pending':
         return redirect('expenses:expense_detail', expense_id=expense_id)
     if request.method == 'POST':
-        expense.amount = re
+        form = ExpenseForm(request.POST, instance=expense)
+        if form.is_valid():
+            form.save()
+            return redirect('expenses:expense_detail', expense_id=expense_id)
+    else:
+        form = ExpenseForm(instance=expense)
     context = {
         'expense': expense,
+        'edit_expense_form': form,
     }
-    return render(request, 'expenses/traveller_expense_edit.html', context)
+    return render(request, 'expenses/expense_edit_traveller.html', context)
 
 @login_required
-def traveller_expense_update(request, expense_id):
-    pass
-
-@login_required
-def expense_edit(request, expense_id):
-    user = request.user
-    # if user is traveller
-        # show form to allow to modify everything except status
-    # if user is approver
-        # show form to allow to modify status and add approver's comment
-pass
-
-@login_required
-def expense_update(request, expense_id):
-    user = request.user
-    # if updated_expense is valid
-        # store expense
-pass
+def expense_update_approver(request, expense_id):
+    expense = get_object_or_404(Expense, pk=expense_id)
+    if not request.user.is_approver():
+        return redirect('expenses:expense_detail', expense_id=expense_id)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        comment = request.POST.get('approvers_comment', '')
+        if action == 'approve':
+            expense.status = 'approved'
+        elif action == 'reject':
+            expense.status = 'rejected'
+        expense.approvers_comment = comment
+        expense.save()
+        return redirect('expenses:approver_expense_list')
+    context = {
+        'expense': expense,
+        'user_type': 'approver',
+    }
+    return render(request, 'expenses/expense_detail.html', context)
