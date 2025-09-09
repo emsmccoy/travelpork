@@ -27,10 +27,10 @@ def expense_list_approver(request):
     }
     
     if filter_type == 'past':
-        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-date')
+        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
         page_title = 'Past expenses'
     else:
-        expenses = Expense.objects.filter(status='pending').order_by('-date')
+        expenses = Expense.objects.filter(status='pending').order_by('-submission_date')
         page_title = 'New expenses'
     context = {
         'expenses': expenses,
