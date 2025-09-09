@@ -1,5 +1,9 @@
 from django.contrib.auth.decorators import login_required
+<<<<<<< HEAD
 from django.shortcuts import render, redirect
+=======
+from django.shortcuts import render, get_object_or_404
+>>>>>>> c687d47 (halfway done)
 from django.http import HttpRequest
 from .models import Expense
 from expenses.forms import ExpenseForm
@@ -47,6 +51,20 @@ def create_expense(request: HttpRequest):
         'form': form
         }
     return render(request, 'expenses/create_expense.html', context)
+def expense_detail(request: HttpRequest, expense_id):
+    expense = get_object_or_404(Expense, pk=expense_id)
+    user = request.user
+    if user.is_approver():
+        user_type = 'approver'
+    else:
+        user_type = 'traveller'
+    context = {
+        'expense': expense,
+        'user_type': user_type,
+    }
+    return render(request, 'expenses/expense_detail.html', context)
+
+@login_required
 def expense_edit(request: HttpRequest, expense_id):
     user = request.user
     # if user is traveller

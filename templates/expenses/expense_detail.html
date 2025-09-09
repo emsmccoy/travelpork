@@ -1,0 +1,20 @@
+Expense ID: {{ expense.id }}<br>
+Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }}<br>
+Amount: {{ expense.amount }}<br>
+Category: {{ expense.category }}<br>
+Description: {{ expense.description }}<br>
+Status: {{ expense.status }}<br>
+{% ius%}
+<a href="">Accept</a>
+<a href="">Reject</a>
+
+
+
+
+date = models.DateTimeField()
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    category = models.CharField(choices=CATEGORY_CHOICES)
+    description = models.CharField(max_length=300)
+    status = models.CharField(choices=STATUS_CHOICES)
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='expenses')
+    approvers_comment = models.CharField(max_length=300, blank=True, null=True)
