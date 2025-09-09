@@ -37,10 +37,7 @@
         <p>Pending: {{ stats.pending_count }}</p>
       </div>
     </div>
-    <a href="{% url 'expenses:expense_create' %}" class="action-card action-card-green">
-       <h3 class="action-card-title">+ Add New Expense</h3>
-       <p class="action-card-description">Create a detailed expense record with preview and summary</p> 
-    </a>
+    
 
     <a href="{% url 'expenses:expense_list_traveller' %}" class="action-card action-card-pink">
       <h3 class="action-card-title">📋 Manage All Expenses</h3>

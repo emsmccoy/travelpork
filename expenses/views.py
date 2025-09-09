@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense
 from expenses.forms import ExpenseForm
+from django.db.models import Sum  
 
 # Create your views here.
 @login_required
@@ -16,16 +17,26 @@ def expense_list_traveller(request):
 @login_required
 def expense_list_approver(request):
     filter_type = request.GET.get('filter', 'new')
+     # NEW: Calculate stats for the dashboard cards, like we did with Traveller
+    all_expenses = Expense.objects.all()
+    stats = {
+        'pending_count': all_expenses.filter(status='pending').count(),
+        'approved_count': all_expenses.filter(status='approved').count(),
+        'reimbursed_count': all_expenses.filter(status='reimbursed').count(),
+        'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
+    }
+    
     if filter_type == 'past':
-        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-date')
+        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
         page_title = 'Past expenses'
     else:
-        expenses = Expense.objects.filter(status='pending').order_by('-date')
+        expenses = Expense.objects.filter(status='pending').order_by('-submission_date')
         page_title = 'New expenses'
     context = {
         'expenses': expenses,
         'filter_type': filter_type,
-        'page_title': page_title
+        'page_title': page_title,
+        'stats': stats,
     }
     return render(request, 'expenses/expense_list_approver.html', context)
 
