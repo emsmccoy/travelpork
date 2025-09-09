@@ -1,22 +1,126 @@
-<a href="?filter=new" class="btn {% if filter_type == 'new' %}active{% endif %}">New Expenses</a>
-<a href="?filter=past" class="btn {% if filter_type == 'past' %}active{% endif %}">Past Expenses</a>
-    
-<h2>{{ page_title }}</h2>
-    
-{% if expenses %}
-    {% for expense in expenses %}
-        Date of expense: {{ expense.expense_date }}<br>
-        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }} on {{ expense.submission_date }}<br>
-        Amount: ${{ expense.amount }}<br>
-        Category: {{ expense.get_category_display }}<br>
-        Status: {{ expense.get_status_display }}<br>
-        {% if filter_type == 'new' %}
-            <a href="{% url 'expenses:expense_detail' expense.id %}">Review</a><br><br>
-        {% endif %}
-        {% if expense.approvers_comment %}
-            Approver's comment: {{ expense.approvers_comment }}<br><br>
-        {% endif %}
-    {% endfor %}
-{% else %}
-No expenses to display in this category.
-{% endif %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Travelpork{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/approver_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="#" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+    </a>
+
+    <h1 class="page-title">Pending Expenses</h1>
+    <p class="page-description">Review and approve travel expenses submitted by all users.</p>
+
+    <!-- Statistics Boxes -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon pending">📋</div>
+            <div class="stat-content">
+                <h3>Pending</h3>
+                <div class="stat-number">{{ stats.pending_count }}</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon approved">✅</div>
+            <div class="stat-content">
+                <h3>Approved</h3>
+                <div class="stat-number">{{ stats.approved_count }}</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon reimbursed">💰</div>
+            <div class="stat-content">
+                <h3>Reimbursed</h3>
+                <div class="stat-number">{{ stats.reimbursed_count }}</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon total">🏷️</div>
+            <div class="stat-content">
+                <h3>Total Amount</h3>
+                <div class="stat-number">${{ stats.total_amount|floatformat:2 }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab-buttons">
+            <a href="?filter=new" class="btn {% if filter_type == 'new' %}active{% endif %}">
+                📋 Pending Expenses ({{ stats.pending_count }})
+            </a>
+            <a href="?filter=past" class="btn {% if filter_type == 'past' %}active{% endif %}">
+                ✅ Past Expenses ({{ stats.approved_count|add:stats.reimbursed_count }})
+            </a>
+        </div>
+
+        <div class="tab-content">
+            <h2>{{ page_title }}</h2>
+
+            {% if expenses %}
+                <table class="expense-table">
+                    <thead>
+                        <tr>
+                            <th>Date </th>
+                            <th>User </th>
+                            <th>Amount </th>
+                            <th>Category </th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in expenses %}
+                        <tr>
+                            <td>{{ expense.expense_date|date:"d/m/y" }}</td>
+                            <td>
+                                👤 {% if expense.user_id.first_name or expense.user_id.last_name %}
+                                    {{ expense.user_id.first_name }} {{ expense.user_id.last_name }}
+                                {% else %}
+                                    {{ expense.user_id.email }}
+                                {% endif %}
+                            </td>
+                            <td class="amount">${{ expense.amount }}</td>
+                            <td>
+                                <span class="category-badge category-{{ expense.category|lower }}">
+                                    {{ expense.get_category_display }}
+                                </span>
+                            </td>
+                            <td>{{ expense.description }}</td>
+                            <td>
+                                <span class="status-badge status-{{ expense.status }}">
+                                    {{ expense.get_status_display|capfirst }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if filter_type == 'new' %}
+                                    <a href="#" class="review-btn">👀 View Details</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if expense.approvers_comment %}
+                        <tr class="comment-row">
+                            <td colspan="7">
+                                <strong>Approver's comment:</strong> {{ expense.approvers_comment }}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No expenses to display in this category.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
