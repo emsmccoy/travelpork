@@ -5,7 +5,7 @@ from .models import Expense
 
 # Create your views here.
 @login_required
-def expense_list(request: HttpRequest):
+def traveller_expense_list(request: HttpRequest):
     user = request.user
     if user.is_traveller():
         expenses = Expense.objects.filter(user_id=user)
@@ -21,4 +21,4 @@ def expense_list(request: HttpRequest):
         'user_type': user_type,
         'expenses': expenses,
     }
-    return render(request, 'expenses/expense_list.html', context)
+    return render(request, 'expenses/traveller_expense_list.html', context)
