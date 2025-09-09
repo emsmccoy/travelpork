@@ -1,0 +1,22 @@
+<a href="?filter=new" class="btn {% if filter_type == 'new' %}active{% endif %}">New Expenses</a>
+<a href="?filter=past" class="btn {% if filter_type == 'past' %}active{% endif %}">Past Expenses</a>
+    
+<h2>{{ page_title }}</h2>
+    
+{% if expenses %}
+    {% for expense in expenses %}
+        Date: {{ expense.date }}<br>
+        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }}<br>
+        Amount: ${{ expense.amount }}<br>
+        Category: {{ expense.get_category_display }}<br>
+        Status: {{ expense.get_status_display }}<br>
+        {% if filter_type == 'new' %}
+            <a href="">Review</a><br><br>
+        {% endif %}
+        {% if expense.approvers_comment %}
+            Approver's comment: {{ expense.approvers_comment }}<br><br>
+        {% endif %}
+    {% endfor %}
+{% else %}
+No expenses to display in this category.
+{% endif %}

@@ -5,20 +5,26 @@ from .models import Expense
 
 # Create your views here.
 @login_required
-def expense_list(request: HttpRequest):
+def traveller_expense_list(request: HttpRequest):
     user = request.user
-    if user.is_traveller():
-        expenses = Expense.objects.filter(user_id=user)
-        user_type = 'traveller'
-    elif user.is_approver():
-        expenses = Expense.objects.all().order_by('status')
-        user_type = 'approver'
-    else:
-        expenses = Expense.objects.none()
-        user_type = 'unknown'
+    expenses = Expense.objects.filter(user_id=user)
     context = {
-        'user': user,
-        'user_type': user_type,
         'expenses': expenses,
     }
-    return render(request, 'expenses/expense_list.html', context)
+    return render(request, 'expenses/traveller_expense_list.html', context)
+
+@login_required
+def approver_expense_list(request: HttpRequest):
+    filter_type = request.GET.get('filter', 'new')
+    if filter_type == 'past':
+        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-date')
+        page_title = 'Past expenses'
+    else:
+        expenses = Expense.objects.filter(status='pending').order_by('-date')
+        page_title = 'New expenses'
+    context = {
+        'expenses': expenses,
+        'filter_type': filter_type,
+        'page_title': page_title
+    }
+    return render(request, 'expenses/approver_expense_list.html', context)
