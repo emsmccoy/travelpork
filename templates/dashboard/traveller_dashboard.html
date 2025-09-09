@@ -37,12 +37,12 @@
         <p>Pending: {{ stats.pending_count }}</p>
       </div>
     </div>
-    <a href="{% url 'expenses:create_expense' %}" class="action-card action-card-green">
+    <a href="{% url 'expenses:expense_create' %}" class="action-card action-card-green">
        <h3 class="action-card-title">+ Add New Expense</h3>
        <p class="action-card-description">Create a detailed expense record with preview and summary</p> 
     </a>
 
-    <a href="{% url 'expenses:traveller_expense_list' %}" class="action-card action-card-pink">
+    <a href="{% url 'expenses:expense_list_traveller' %}" class="action-card action-card-pink">
       <h3 class="action-card-title">📋 Manage All Expenses</h3>
       <p class="action-card-description">View, edit, and organize your complete expense list</p></a>
     
@@ -65,7 +65,7 @@
           </div>
           <div class="form-group">
             <label>Date</label>
-            {{ form.date }}
+            {{ form.expense_date }}
           </div>
           <div class="form-group full-width">
             <label>Description</label>

@@ -4,10 +4,10 @@ from . import views
 app_name = 'expenses'
 
 urlpatterns = [
-    path('traveller/', views.traveller_expense_list, name='traveller_expense_list'),
-    path('approver/', views.approver_expense_list, name='approver_expense_list'),
-    path('new/', views.create_expense, name='create_expense'),
+    path('create/', views.create_expense, name='expense_create'),
+    path('list/traveller/', views.expense_list_traveller, name='expense_list_traveller'),
+    path('list/approver/', views.expense_list_approver, name='expense_list_approver'),
     path('<int:expense_id>/detail/', views.expense_detail, name='expense_detail'),
-    path('<int:expense_id>/edit/', views.expense_edit, name='expense_edit'),
-    path('<int:expense_id>/update/', views.expense_update, name='expense_update'),
+    # path('<int:expense_id>/edit/', views.expense_edit_traveller, name='expense_edit'),
+    # path('<int:expense_id>/approve/', views.expense_update_approver, name='expense_approve'),
 ]

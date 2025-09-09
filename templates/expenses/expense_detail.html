@@ -1,11 +1,12 @@
 Expense ID: {{ expense.id }}<br>
-Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }}<br>
+Date: {{ expense.expense_date }}
+Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }} on {{ expense.submission_date }}<br>
 Amount: {{ expense.amount }}<br>
 Category: {{ expense.category }}<br>
 Description: {{ expense.description }}<br>
 Status: {{ expense.status }}<br>
 {% if user_type == 'traveller' and expense.status == 'pending' %}
-<a href="{% url 'expenses:traveller_expense_edit' expense.id %}">Modify</a>
+<a href="">Modify</a>
 {% elif user_type == 'approver' %}
 <a href="">Accept</a> <a href="">Reject</a><br>
 Leave a comment<br> 

@@ -5,8 +5,8 @@
     
 {% if expenses %}
     {% for expense in expenses %}
-        Date: {{ expense.date }}<br>
-        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }}<br>
+        Date of expense: {{ expense.expense_date }}<br>
+        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }} on {{ expense.submission_date }}<br>
         Amount: ${{ expense.amount }}<br>
         Category: {{ expense.get_category_display }}<br>
         Status: {{ expense.get_status_display }}<br>
