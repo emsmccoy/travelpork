@@ -16,13 +16,9 @@ def dashboard_redirect(request):
     if user.is_traveller():
         return redirect('users:traveller_dashboard')
     elif user.is_approver():
-        return redirect('users:approver_dashboard')
+        return redirect('expenses:approver_expense_list')
     else:
         return redirect('users:default_dashboard')
-    
-@login_required
-def approver_dashboard(request):
-    return render(request, 'dashboard/approver_dashboard.html')
 
 @login_required
 def traveller_dashboard(request):
