@@ -139,19 +139,24 @@ body {
 }
 
 .expenses-table th:first-child {
-    width: 20%;
+    width: 23%;
 }
 
 .expenses-table th:nth-child(2) {
-    width: 20%;
+    width: 23%;
 }
 
 .expenses-table th:nth-child(3) {
-    width: 30%;
+    width: 23%;
 }
 
 .expenses-table th:nth-child(4) {
-    width: 30%;
+    width: 20%;
+}
+
+.expenses-table td:nth-child(5) {
+    width: 20%;
+    text-align: center; 
 }
 
 .expenses-table td {

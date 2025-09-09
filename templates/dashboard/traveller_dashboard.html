@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Dashboard - TravelPork{% endblock %}
 {% block extra_css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/traveller_dashboard.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/traveller_dashboard.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -41,13 +41,11 @@
        <h3 class="action-card-title">+ Add New Expense</h3>
        <p class="action-card-description">Create a detailed expense record with preview and summary</p> 
     </a>
+
     <a href="{% url 'expenses:traveller_expense_list' %}" class="action-card action-card-pink">
       <h3 class="action-card-title">📋 Manage All Expenses</h3>
       <p class="action-card-description">View, edit, and organize your complete expense list</p></a>
-    <div class="action-card action-card-purple">
-      <h3 class="action-card-title">✅ Approver Dashboard</h3>
-      <p class="action-card-description">Review and approve pending expenses from all users</p>
-    </div>
+    
   </div>
 
   <!-- Form for adding New Expense-->

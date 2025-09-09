@@ -20,7 +20,6 @@
 </div>
 
 <div class="content-container">
-  
   <div class="page-nav">
     <a href="{% url 'users:traveller_dashboard' %}" class="back-link">← Back to Dashboard</a>
     <div class="page-info">
@@ -31,7 +30,6 @@
       <a href="{% url 'expenses:create_expense' %}" class="btn btn-primary">+ Add New Expense</a>
     </div>
   </div>
-  
   {% if expenses %}
   <div class="table-container">
     <h3>Your Travel Expenses ({{ expenses.count }} total)</h3>
@@ -43,27 +41,33 @@
           <th>Amount </th>
           <th>Category </th>
           <th>Status </th>
+          <th>View </th>
         </tr>
       </thead>
       <tbody>
-        {% for expense in expenses %}
-        <tr>
-          <td>{{ expense.date|date:"d/m/Y" }}</td>
-          <td>${{ expense.amount|floatformat:2 }}</td>
-          <td>
-            <span class="category-tag category-{{ expense.category|lower }}">
-              {{ expense.get_category_display }}
-            </span>
-          </td>
-          
-          <td>
-            <span class="status-badge status-{{ expense.status|lower }}">
-              {{ expense.get_status_display }}
-            </span>
-          </td>
-          
-        {% endfor %}
-      </tbody>
+  {% for expense in expenses %}
+    <tr>
+      <td>{{ expense.date|date:"d/m/Y" }}</td>
+      <td>${{ expense.amount|floatformat:2 }}</td>
+      <td>
+        <span class="category-tag category-{{ expense.category|lower }}">
+          {{ expense.get_category_display }}
+        </span>
+      </td>
+      <td>
+        <span class="status-badge status-{{ expense.status|lower }}">
+          {{ expense.get_status_display }}
+        </span>
+      </td>
+      <td style="display:flex; flex-direction:column; gap:2px;">
+        <span class="action-badge action-{{ expense.action|lower }}">
+          {{ expense.get_action_display }}
+        </span>
+  <a href="{% url 'users:traveller_dashboard' %}" title="View Expense" style="text-decoration:none; font-size:1.2em;">👁️<span class="sr-only"></span></a>
+    </td>
+    </tr>
+  {% endfor %}
+</tbody>
     </table>
   </div>
   {% else %}
