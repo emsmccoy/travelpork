@@ -47,3 +47,17 @@ def create_expense(request: HttpRequest):
         'form': form
         }
     return render(request, 'expenses/create_expense.html', context)
+def expense_edit(request: HttpRequest, expense_id):
+    user = request.user
+    # if user is traveller
+        # show form to allow to modify everything except status
+    # if user is approver
+        # show form to allow to modify status and add approver's comment
+pass
+
+@login_required
+def expense_update(request: HttpRequest, expense_id):
+    user = request.user
+    # if updated_expense is valid
+        # store expense
+pass
