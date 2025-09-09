@@ -6,4 +6,5 @@ app_name = 'expenses'
 urlpatterns = [
     path('traveller/', views.traveller_expense_list, name='traveller_expense_list'),
     path('approver/', views.approver_expense_list, name='approver_expense_list'),
+    path('new/', views.create_expense, name='create_expense'),
 ]
