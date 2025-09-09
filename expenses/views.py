@@ -1,16 +1,11 @@
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
-from django.shortcuts import render, redirect
-=======
-from django.shortcuts import render, get_object_or_404
->>>>>>> c687d47 (halfway done)
-from django.http import HttpRequest
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense
 from expenses.forms import ExpenseForm
 
 # Create your views here.
 @login_required
-def traveller_expense_list(request: HttpRequest):
+def traveller_expense_list(request):
     user = request.user
     expenses = Expense.objects.filter(user_id=user)
     context = {
@@ -19,7 +14,7 @@ def traveller_expense_list(request: HttpRequest):
     return render(request, 'expenses/traveller_expense_list.html', context)
 
 @login_required
-def approver_expense_list(request: HttpRequest):
+def approver_expense_list(request):
     filter_type = request.GET.get('filter', 'new')
     if filter_type == 'past':
         expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-date')
@@ -35,7 +30,7 @@ def approver_expense_list(request: HttpRequest):
     return render(request, 'expenses/approver_expense_list.html', context)
 
 @login_required
-def create_expense(request: HttpRequest):
+def create_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
@@ -51,7 +46,8 @@ def create_expense(request: HttpRequest):
         'form': form
         }
     return render(request, 'expenses/create_expense.html', context)
-def expense_detail(request: HttpRequest, expense_id):
+
+def expense_detail(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     user = request.user
     if user.is_approver():
@@ -65,7 +61,23 @@ def expense_detail(request: HttpRequest, expense_id):
     return render(request, 'expenses/expense_detail.html', context)
 
 @login_required
-def expense_edit(request: HttpRequest, expense_id):
+def traveller_expense_edit(request, expense_id):
+    expense = get_object_or_404(Expense, pk=expense_id)
+    if expense.user_id != request.user or not request.user.is_traveller():
+        return redirect('expenses:expense_detail', expense_id=expense_id)
+    if expense.status != 'pending':
+        return redirect('expenses:expense_detail', expense_id=expense_id)
+    context = {
+        'expense': expense,
+    }
+    return render(request, 'expenses/traveller_expense_edit.html', context)
+
+@login_required
+def traveller_expense_update(request, expense_id):
+    pass
+
+@login_required
+def expense_edit(request, expense_id):
     user = request.user
     # if user is traveller
         # show form to allow to modify everything except status
@@ -74,7 +86,7 @@ def expense_edit(request: HttpRequest, expense_id):
 pass
 
 @login_required
-def expense_update(request: HttpRequest, expense_id):
+def expense_update(request, expense_id):
     user = request.user
     # if updated_expense is valid
         # store expense
