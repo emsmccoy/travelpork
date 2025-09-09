@@ -1,0 +1,8 @@
+<section>
+    <h1>Edit expense</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ edit_expense_form.as_p }}
+        <button type="submit">Update expense</button>
+    </form>
+</section>

@@ -5,13 +5,13 @@
     
 {% if expenses %}
     {% for expense in expenses %}
-        Date: {{ expense.date }}<br>
-        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }}<br>
+        Date of expense: {{ expense.expense_date }}<br>
+        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }} on {{ expense.submission_date }}<br>
         Amount: ${{ expense.amount }}<br>
         Category: {{ expense.get_category_display }}<br>
         Status: {{ expense.get_status_display }}<br>
         {% if filter_type == 'new' %}
-            <a href="">Review</a><br><br>
+            <a href="{% url 'expenses:expense_detail' expense.id %}">Review</a><br><br>
         {% endif %}
         {% if expense.approvers_comment %}
             Approver's comment: {{ expense.approvers_comment }}<br><br>

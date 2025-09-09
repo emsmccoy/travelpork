@@ -16,7 +16,7 @@ def dashboard_redirect(request):
     if user.is_traveller():
         return redirect('users:traveller_dashboard')
     elif user.is_approver():
-        return redirect('expenses:approver_expense_list')
+        return redirect('expenses:expense_list_approver')
     else:
         return redirect('users:default_dashboard')
 
