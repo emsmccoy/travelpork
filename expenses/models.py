@@ -27,6 +27,7 @@ class Expense(models.Model):
     status = models.CharField(choices=STATUS_CHOICES)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='expenses')
     approvers_comment = models.CharField(max_length=300, blank=True, null=True)
+    is_modified = models.BooleanField(default=False)
     
     def __str__(self):
         return f'Expense\nUser id: {self.user_id}\nAmount: {self.amount}\nExpense date: {self.date}\nStatus: {self.status}'

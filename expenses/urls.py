@@ -9,5 +9,6 @@ urlpatterns = [
     path('list/approver/', views.expense_list_approver, name='expense_list_approver'),
     path('<int:expense_id>/detail/', views.expense_detail, name='expense_detail'),
     path('<int:expense_id>/edit/', views.expense_edit_traveller, name='expense_edit_traveller'),
-    path('<int:expense_id>/approve/', views.expense_update_approver, name='expense_approve'),
+    path('<int:expense_id>/approve/', views.expense_update_approver, name='expense_update_approver'),
+    path('<int:expense_id>/delete/', views.expense_delete, name='expense_delete_traveller'),
 ]

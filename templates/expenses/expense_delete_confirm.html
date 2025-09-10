@@ -1,0 +1,16 @@
+<h1>Delete Expense</h1>
+
+<p>Are you sure you want to delete this expense?</p>
+
+<div class="expense-details">
+    <p><strong>Date:</strong> {{ expense.expense_date }}</p>
+    <p><strong>Amount:</strong> ${{ expense.amount }}</p>
+    <p><strong>Category:</strong> {{ expense.get_category_display }}</p>
+    <p><strong>Description:</strong> {{ expense.description }}</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn-danger">Yes, Delete</button>
+    <a href="{% url 'expenses:expense_detail' expense.id %}" class="btn">Cancel</a>
+</form>
