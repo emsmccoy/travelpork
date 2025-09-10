@@ -1,16 +1,52 @@
-<h1>Delete Expense</h1>
+{% extends 'base.html' %}
+{% load static %}
 
-<p>Are you sure you want to delete this expense?</p>
+{% block title %}Delete Expense - TravelPork{% endblock %}
 
-<div class="expense-details">
-    <p><strong>Date:</strong> {{ expense.expense_date }}</p>
-    <p><strong>Amount:</strong> ${{ expense.amount }}</p>
-    <p><strong>Category:</strong> {{ expense.get_category_display }}</p>
-    <p><strong>Description:</strong> {{ expense.description }}</p>
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/expense_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div class="header-left">
+        <h1>Travelpork</h1>
+    </div>
+    <div class="header-right">
+        <span class="welcome-text">Welcome back, {{ user.email }}</span>
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Logout</button>
+        </form>
+    </div>
 </div>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn-danger">Yes, Delete</button>
-    <a href="{% url 'expenses:expense_detail' expense.id %}" class="btn">Cancel</a>
-</form>
+<div class="container">
+    <div class="page-nav">
+        <a href="{% url 'expenses:expense_list_traveller' %}" class="back-link">← Back to Dashboard</a>
+    </div>
+    
+    <div class="page-info">
+        <h1>Delete Expense</h1>
+    </div>
+    
+    <section class="delete-confirmation">
+        <p class="warning-message">Are you sure you want to delete this expense?</p>
+        
+        <div class="expense-details">
+            <p><strong>Date:</strong> {{ expense.expense_date }}</p>
+            <p><strong>Amount:</strong> ${{ expense.amount }}</p>
+            <p><strong>Category:</strong> {{ expense.get_category_display }}</p>
+            <p><strong>Description:</strong> {{ expense.description }}</p>
+        </div>
+        
+        <div class="form-actions">
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </form>
+            <a href="{% url 'expenses:expense_list_traveller' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

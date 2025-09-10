@@ -261,11 +261,15 @@
     color: #2563eb;
 }
 
-.category-other {
+.category-others {
     background: #f3f4f6;
     color: #6b7280;
 }
 
+.category-trains {
+    background: #dbeafe;
+    color: #6b7280;
+}
 .status-badge {
     display: inline-block;
     padding: 0.25rem 0.75rem;
