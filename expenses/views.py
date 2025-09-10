@@ -14,29 +14,29 @@ def expense_list_traveller(request):
     }
     return render(request, 'expenses/expense_list_traveller.html', context)
 
-@login_required
-def expense_list_approver(request):
-    filter_type = request.GET.get('filter', 'new')
-    all_expenses = Expense.objects.all()
-    stats = {
-        'pending_count': all_expenses.filter(status='pending').count(),
-        'approved_count': all_expenses.filter(status='approved').count(),
-        'rejected_count': all_expenses.filter(status='rejected').count(),
-        'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
-    }
-    if filter_type == 'past':
-        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
-        page_title = 'Past expenses'
-    else:
-        expenses = Expense.objects.filter(status='pending').order_by('-submission_date')
-        page_title = 'New expenses'
-    context = {
-        'expenses': expenses,
-        'filter_type': filter_type,
-        'page_title': page_title,
-        'stats': stats,
-    }
-    return render(request, 'expenses/expense_list_approver.html', context)
+# @login_required
+# def expense_list_approver(request):
+#     filter_type = request.GET.get('filter', 'new')
+#     all_expenses = Expense.objects.all()
+#     stats = {
+#         'pending_count': all_expenses.filter(status='pending').count(),
+#         'approved_count': all_expenses.filter(status='approved').count(),
+#         'rejected_count': all_expenses.filter(status='rejected').count(),
+#         'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
+#     }
+#     if filter_type == 'past':
+#         expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
+#         page_title = 'Past expenses'
+#     else:
+#         expenses = Expense.objects.filter(status='pending').order_by('-submission_date')
+#         page_title = 'New expenses'
+#     context = {
+#         'expenses': expenses,
+#         'filter_type': filter_type,
+#         'page_title': page_title,
+#         'stats': stats,
+#     }
+#     return render(request, 'expenses/expense_list_approver.html', context)
 
 # @login_required
 # def create_expense(request):
