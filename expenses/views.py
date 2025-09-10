@@ -21,7 +21,7 @@ def expense_list_approver(request):
     stats = {
         'pending_count': all_expenses.filter(status='pending').count(),
         'approved_count': all_expenses.filter(status='approved').count(),
-        'reimbursed_count': all_expenses.filter(status='reimbursed').count(),
+        'rejected_count': all_expenses.filter(status='rejected').count(),
         'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
     }
     if filter_type == 'past':
