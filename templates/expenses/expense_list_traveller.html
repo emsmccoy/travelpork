@@ -23,6 +23,7 @@
 </div>
 
 <div class="content-container">
+
  <div class="page-nav">
    <a href="{% url 'users:traveller_dashboard' %}" class="back-link">← Back to Dashboard</a>
    <div class="page-info">
@@ -68,6 +69,7 @@
  </span>
  <a href="{% url 'expenses:expense_detail' expense.id %}" class="view-btn">View</a>
  {% if expense.status == 'pending' %}<a href="{% url 'expenses:expense_delete_traveller' expense.id %}" class="delete-btn">Delete</a>{% endif %}
+
 </td>
    </tr>
  {% endfor %}
