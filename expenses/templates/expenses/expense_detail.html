@@ -13,7 +13,7 @@
     <h1>Travelpork</h1>
   </div>
   <div class="header-right">
-    <span class="welcome-text">Welcome back, {{ user.username }}</span>
+    <span class="welcome-text">Welcome back, {{ user.email }}</span>
     <form method="post" action="{% url 'logout' %}" style="display: inline;">
     {% csrf_token %}
     <button type="submit" class="btn btn-primary">Logout</button>
@@ -26,7 +26,7 @@
         {% if user_type == 'traveller' %}
         <a href="{% url 'expenses:expense_list_traveller' %}" class="back-link">← Back to expenses list</a>
         {% elif user_type == 'approver' %}
-        <a href="{% url 'expenses:expense_list_approver' %}" class="back-link">← Back to Dashboard</a>
+        <a href="{% url 'users:approver_dashboard' %}" class="back-link">← Back to Dashboard</a>
         {% endif %}
     </div>
 
