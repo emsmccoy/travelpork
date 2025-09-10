@@ -139,5 +139,6 @@ class Command(BaseCommand):
                 expense_date=expense_data['expense_date'],
                 user_id=expense_data['user_id'],
                 description=expense_data['description'],
+                amount=expense_data['amount'],
                 defaults=expense_data
             )

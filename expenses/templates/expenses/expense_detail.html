@@ -23,7 +23,11 @@
 
 <div class="container">
 <div class="page-nav">
-        <a href="{% url 'users:traveller_dashboard' %}" class="back-link">← Back to Dashboard</a>
+        {% if user_type == 'traveller' %}
+        <a href="{% url 'expenses:expense_list_traveller' %}" class="back-link">← Back to expenses list</a>
+        {% elif user_type == 'approver' %}
+        <a href="{% url 'expenses:expense_list_approver' %}" class="back-link">← Back to Dashboard</a>
+        {% endif %}
     </div>
 
     <div class="expense-details">
