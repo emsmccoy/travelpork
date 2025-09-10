@@ -16,7 +16,7 @@ class ExpenseListViewTests(TestCase):
     
     def test_traveller_sees_only_own_expenses(self):
         self.client.force_login(self.john)
-        response = self.client.get(reverse('expenses:expense_list'))
+        response = self.client.get(reverse('expenses:expense_list_approver'))
         self.assertEqual(response.status_code, 200)
         expenses_in_context = response.context['expenses']
         self.assertEqual(expenses_in_context.count(), 3)
@@ -25,7 +25,7 @@ class ExpenseListViewTests(TestCase):
                 
     def test_different_traveller_sees_different_expenses(self):
         self.client.force_login(self.jane)
-        response = self.client.get(reverse('expenses:expense_list'))
+        response = self.client.get(reverse('expenses:expense_list_approver'))
         self.assertEqual(response.status_code, 200)
         expenses_in_context = response.context['expenses']
         self.assertEqual(expenses_in_context.count(), 3)
