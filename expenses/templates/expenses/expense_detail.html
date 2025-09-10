@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Expense Details - TravelPork{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/expense_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="header">
+  <div class="header-left">
+    <h1>Travelpork</h1>
+  </div>
+  <div class="header-right">
+    <span class="welcome-text">Welcome back, {{ user.email }}</span>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
+</div>
+
+<div class="container">
+<div class="page-nav">
+        <a href="{% url 'users:traveller_dashboard' %}" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <div class="expense-details">
+        Expense ID: {{ expense.id }}<br> 
+        Date: {{ expense.expense_date }}<br> 
+        Submitted by: {{ expense.user_id.first_name }} {{ expense.user_id.last_name }} on {{ expense.submission_date }}<br> 
+        Amount: {{ expense.amount }}<br> 
+        Category: {{ expense.category }}<br> 
+        Description: {{ expense.description }}<br> 
+        {% if expense.is_modified %}<div class="modified-message">MODIFIED</div>{% endif %}<br>
+        Status: {{ expense.status }}<br>
+        {% if expense.approvers_comment %}Approver's comment: {{ expense.approvers_comment }}{% endif %}<br>  
+
+        {% if user_type == 'traveller' and expense.status == 'pending' %}     
+            <a href="{% url 'expenses:expense_edit_traveller' expense.id %}">Modify</a> 
+        {% elif user_type == 'approver' %}     
+            <form method="post" action="{% url 'expenses:expense_update_approver' expense.id %}">         
+                {% csrf_token %}         
+                <div>             
+                    <label for="approvers_comment">Leave a comment:</label><br>             
+                    <textarea name="approvers_comment" rows="4" cols="50" placeholder="Add your comment here (optional)...">{{ expense.approvers_comment }}</textarea>         
+                </div>         
+                <div>             
+                    <button type="submit" name="action" value="approve">Accept</button>             
+                    <button type="submit" name="action" value="reject">Reject</button>         
+                </div>     
+            </form> 
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
