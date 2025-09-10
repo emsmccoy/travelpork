@@ -8,18 +8,23 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <a href="#" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Dashboard
-    </a>
+<div class="header">
+  <div class="header-left">
+    <h1>Travelpork</h1>
+  </div>
+  <div class="header-right">
+    <span class="welcome-text">Welcome back, {{ user.email }}</span>
+    <a href="{% url 'login' %}" class="btn btn-primary">Logout</a>
+  </div>
+</div>
 
-    <h1 class="page-title">Pending Expenses</h1>
+<div class="container">
+    <h1 class="page-title">Approver Dashboard</h1>
     <p class="page-description">Review and approve travel expenses submitted by all users.</p>
 
     <!-- Statistics Boxes -->
     <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card pending">
             <div class="stat-icon pending">📋</div>
             <div class="stat-content">
                 <h3>Pending</h3>
@@ -27,7 +32,7 @@
             </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card approved">
             <div class="stat-icon approved">✅</div>
             <div class="stat-content">
                 <h3>Approved</h3>
@@ -35,7 +40,7 @@
             </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card reimbursed">
             <div class="stat-icon reimbursed">💰</div>
             <div class="stat-content">
                 <h3>Reimbursed</h3>
@@ -43,7 +48,7 @@
             </div>
         </div>
 
-        <div class="stat-card">
+        <div class="stat-card total">
             <div class="stat-icon total">🏷️</div>
             <div class="stat-content">
                 <h3>Total Amount</h3>
@@ -69,13 +74,15 @@
                 <table class="expense-table">
                     <thead>
                         <tr>
-                            <th>Date </th>
-                            <th>User </th>
-                            <th>Amount </th>
-                            <th>Category </th>
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Category</th>
                             <th>Description</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            {% if filter_type == 'new' %}
+                                <th>Actions</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -101,19 +108,12 @@
                                     {{ expense.get_status_display|capfirst }}
                                 </span>
                             </td>
-                            <td>
-                                {% if filter_type == 'new' %}
-                                    <a href="#" class="review-btn">👀 View Details</a>
-                                {% endif %}
-                            </td>
+                            {% if filter_type == 'new' %}
+                                <td>
+                                    <a href="{% url 'expenses:expense_detail' expense.id %}" class="view-btn">👀 View</a>
+                                </td>
+                            {% endif %}
                         </tr>
-                        {% if expense.approvers_comment %}
-                        <tr class="comment-row">
-                            <td colspan="7">
-                                <strong>Approver's comment:</strong> {{ expense.approvers_comment }}
-                            </td>
-                        </tr>
-                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -124,3 +124,4 @@
     </div>
 </div>
 {% endblock %}
+
