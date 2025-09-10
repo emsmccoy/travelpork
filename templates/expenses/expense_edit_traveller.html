@@ -1,8 +1,45 @@
-<section>
-    <h1>Edit expense</h1>
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ edit_expense_form.as_p }}
-        <button type="submit">Update expense</button>
-    </form>
-</section>
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Expense Details - TravelPork{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/expense_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div class="header-left">
+        <h1>Travelpork</h1>
+    </div>
+    <div class="header-right">
+        <span class="welcome-text">Welcome back, {{ user.email }}</span>
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Logout</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="page-nav">
+        <a href="{% url 'expenses:expense_list_traveller' %}" class="back-link">← Back to Dashboard</a>
+    </div>
+    
+    <div class="page-info">
+        <h1>Edit Expense</h1>
+    </div>
+    
+    <section class="form-section">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ edit_expense_form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Expense</button>
+                <a href="{% url 'expenses:expense_list_traveller' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}
