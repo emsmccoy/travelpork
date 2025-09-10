@@ -22,7 +22,7 @@ def expense_list_approver(request):
         'pending_count': all_expenses.filter(status='pending').count(),
         'approved_count': all_expenses.filter(status='approved').count(),
         'rejected_count': all_expenses.filter(status='rejected').count(),
-        'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
+        'total_amount': all_expenses.filter(status='approved').aggregate(Sum('amount'))['amount__sum'] or 0,
     }
     if filter_type == 'past':
         expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
