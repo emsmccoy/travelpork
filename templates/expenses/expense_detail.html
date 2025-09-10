@@ -14,7 +14,10 @@
   </div>
   <div class="header-right">
     <span class="welcome-text">Welcome back, {{ user.email }}</span>
-    <a href="{% url 'login' %}" class="btn btn-primary">Logout</a>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
   </div>
 </div>
 
@@ -30,12 +33,14 @@
         Amount: {{ expense.amount }}<br> 
         Category: {{ expense.category }}<br> 
         Description: {{ expense.description }}<br> 
-        Status: {{ expense.status }}<br>  
+        {% if expense.is_modified %}<div class="modified-message">MODIFIED</div>{% endif %}<br>
+        Status: {{ expense.status }}<br>
+        {% if expense.approvers_comment %}Approver's comment: {{ expense.approvers_comment }}{% endif %}<br>  
 
         {% if user_type == 'traveller' and expense.status == 'pending' %}     
             <a href="{% url 'expenses:expense_edit_traveller' expense.id %}">Modify</a> 
         {% elif user_type == 'approver' %}     
-            <form method="post" action="{% url 'expenses:expense_approve' expense.id %}">         
+            <form method="post" action="{% url 'expenses:expense_update_approver' expense.id %}">         
                 {% csrf_token %}         
                 <div>             
                     <label for="approvers_comment">Leave a comment:</label><br>             
