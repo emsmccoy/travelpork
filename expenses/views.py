@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense
-from expenses.forms import ExpenseForm
+from users.forms import ExpenseForm
 from django.db.models import Sum  
 
 # Create your views here.
@@ -38,22 +38,24 @@ def expense_list_approver(request):
     }
     return render(request, 'expenses/expense_list_approver.html', context)
 
-@login_required
-def create_expense(request):
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            expense = form.save(commit=False)
-            expense.user_id = request.user
-            expense.status = "pending"
-            expense.save()
-            return redirect('users:traveller_dashboard')
-    else:
-        form = ExpenseForm()
-    context = {
-        'form': form
-    }
-    return render(request, 'expenses/create_expense.html', context)
+# @login_required
+# def create_expense(request):
+#     if request.method == 'POST':
+#         form = ExpenseForm(request.POST)
+#         if form.is_valid():
+#             expense = form.save(commit=False)
+#             expense.user_id = request.user
+#             expense.status = "pending"
+#             expense.save()
+#             return redirect('users:traveller_dashboard')
+#     else:
+#         form = ExpenseForm()
+#     context = {
+#         'form': form
+#     }
+#     return render(request, 'expenses/create_expense.html', context)
+
+
 
 @login_required
 def expense_detail(request, expense_id):
@@ -68,8 +70,6 @@ def expense_detail(request, expense_id):
         'user_type': user_type,
     }
     return render(request, 'expenses/expense_detail.html', context)
-
-from expenses.forms import ExpenseForm  # Make sure to import your form
 
 @login_required
 def expense_edit_traveller(request, expense_id):

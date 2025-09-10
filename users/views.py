@@ -4,7 +4,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib import messages  
 from django.db.models import Sum     
 from expenses.models import Expense  
-from .forms import ExpenseForm  
+from users.forms import ExpenseForm  
+
 
 # Create your views here.
 def home(request):
@@ -22,24 +23,26 @@ def dashboard_redirect(request):
 
 @login_required
 def traveller_dashboard(request):
-    user_expenses = Expense.objects.filter(user_id=request.user)
+    user_expenses = Expense.objects.filter(user_id=request.user) # to retrieve the expense descriptions 
     
-    # stats calculation
+    # To show stats on the dashboard
     stats = {
         'total_expenses': user_expenses.count(),
         'total_amount': user_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
         'pending_count': user_expenses.filter(status='pending').count(),
+        'approved_count': user_expenses.filter(status='approved').count(),  
+        'rejected_count': user_expenses.filter(status='rejected').count(),   
     }
     
-    # add expense form
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
             expense = form.save(commit=False)
             expense.user_id = request.user
+            expense.status = "pending"  
             expense.save()
             messages.success(request, 'Expense added successfully!')
-            return redirect('traveller_dashboard')
+            return redirect('users:traveller_dashboard')  
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -48,7 +51,9 @@ def traveller_dashboard(request):
     context = {
         'stats': stats,
         'form': form,
+        'user_expenses': user_expenses,  
     }
+    
     return render(request, 'dashboard/traveller_dashboard.html', context)
 
 @login_required
