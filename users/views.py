@@ -17,7 +17,7 @@ def dashboard_redirect(request):
     if user.is_traveller():
         return redirect('users:traveller_dashboard')
     elif user.is_approver():
-        return redirect('expenses:expense_list_approver')
+        return redirect('users:approver_dashboard')
     else:
         return redirect('users:default_dashboard')
 
@@ -55,6 +55,31 @@ def traveller_dashboard(request):
     }
     
     return render(request, 'dashboard/traveller_dashboard.html', context)
+
+@login_required
+def approver_dashboard(request):
+    filter_type = request.GET.get('filter', 'new')
+    all_expenses = Expense.objects.all()
+    stats = {
+        'pending_count': all_expenses.filter(status='pending').count(),
+        'approved_count': all_expenses.filter(status='approved').count(),
+        'reimbursed_count': all_expenses.filter(status='reimbursed').count(),
+        'total_amount': all_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
+    }
+    if filter_type == 'past':
+        expenses = Expense.objects.filter(status__in=['approved', 'rejected']).order_by('-submission_date')
+        page_title = 'Past expenses'
+    else:
+        expenses = Expense.objects.filter(status='pending').order_by('-submission_date')
+        page_title = 'New expenses'
+    context = {
+        'expenses': expenses,
+        'filter_type': filter_type,
+        'page_title': page_title,
+        'stats': stats,
+    }
+    return render(request, 'dashboard/approver_dashboard.html', context)
+
 
 @login_required
 def default_dashboard(request):
