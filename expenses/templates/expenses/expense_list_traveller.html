@@ -13,7 +13,7 @@
    <h1>Travelpork</h1>
  </div>
  <div class="header-right">
-   <span class="welcome-text">Welcome back, {{ user.username }}</span>
+   <span class="welcome-text">Welcome back, {{ user.email }}</span>
    <form method="post" action="{% url 'logout' %}" style="display: inline;">
     {% csrf_token %}
     <button type="submit" class="btn btn-primary">Logout</button>

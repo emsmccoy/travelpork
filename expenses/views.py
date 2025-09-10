@@ -105,7 +105,7 @@ def expense_update_approver(request, expense_id):
             expense.status = 'rejected'
         expense.approvers_comment = comment
         expense.save()
-        return redirect('expenses:expense_list_approver')
+        return redirect('users:approver_dashboard')
     context = {
         'expense': expense,
         'user_type': 'approver',
