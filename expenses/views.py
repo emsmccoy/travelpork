@@ -79,9 +79,11 @@ def expense_edit_traveller(request, expense_id):
     if expense.status != 'pending':
         return redirect('expenses:expense_detail', expense_id=expense_id)
     if request.method == 'POST':
-        form = ExpenseForm(request.POST, instance=expense)
+        form = ExpenseForm(request.POST, instance=expense) # creates a form (values = input from user) bound to existing expense object
         if form.is_valid():
-            form.save()
+            expense = form.save(commit=False) # updates existing expense object with form data without saving it in DB
+            expense.is_modified = True # set is_modified field to true
+            expense.save() # saves modified expense object in DB
             return redirect('expenses:expense_detail', expense_id=expense_id)
     else:
         form = ExpenseForm(instance=expense)
@@ -105,9 +107,24 @@ def expense_update_approver(request, expense_id):
             expense.status = 'rejected'
         expense.approvers_comment = comment
         expense.save()
-        return redirect('expenses:approver_expense_list')
+        return redirect('expenses:expense_list_approver')
     context = {
         'expense': expense,
         'user_type': 'approver',
     }
     return render(request, 'expenses/expense_detail.html', context)
+
+@login_required
+def expense_delete(request, expense_id):
+    expense = get_object_or_404(Expense, pk=expense_id)
+    if not request.user.is_traveller() or expense.user_id != request.user:
+        return redirect('expenses: expense_list_traveller', expense_id=expense_id)
+    if expense.status != 'pending':
+        return redirect('expenses: expense_list_traveller', expense_id=expense_id)
+    if request.method == 'POST':
+        expense.delete()
+        return redirect('expenses:expense_list_traveller')
+    context = {
+        'expense': expense,
+    }
+    return render(request, 'expenses/expense_delete_confirm.html', context)

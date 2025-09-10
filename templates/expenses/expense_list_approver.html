@@ -14,7 +14,10 @@
   </div>
   <div class="header-right">
     <span class="welcome-text">Welcome back, {{ user.email }}</span>
-    <a href="{% url 'login' %}" class="btn btn-primary">Logout</a>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
   </div>
 </div>
 
