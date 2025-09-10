@@ -55,8 +55,6 @@ def expense_list_approver(request):
 #     }
 #     return render(request, 'expenses/create_expense.html', context)
 
-
-
 @login_required
 def expense_detail(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
