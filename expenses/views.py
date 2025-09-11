@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense
-from users.forms import ExpenseForm
-from django.db.models import Sum  
+from .forms import ExpenseForm
+from django.db.models import Sum
+from django.contrib import messages  
 
 # Create your views here.
 @login_required
@@ -38,22 +39,19 @@ def expense_list_traveller(request):
 #     }
 #     return render(request, 'expenses/expense_list_approver.html', context)
 
-# @login_required
-# def create_expense(request):
-#     if request.method == 'POST':
-#         form = ExpenseForm(request.POST)
-#         if form.is_valid():
-#             expense = form.save(commit=False)
-#             expense.user_id = request.user
-#             expense.status = "pending"
-#             expense.save()
-#             return redirect('users:traveller_dashboard')
-#     else:
-#         form = ExpenseForm()
-#     context = {
-#         'form': form
-#     }
-#     return render(request, 'expenses/create_expense.html', context)
+def expense_create(request, user):
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            expense = form.save(commit=False)
+            expense.user_id = user
+            expense.status = "pending"
+            expense.save()
+            return True, ExpenseForm()
+        else:
+            return False, form
+    else:
+        return False, ExpenseForm()
 
 @login_required
 def expense_detail(request, expense_id):

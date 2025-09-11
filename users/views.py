@@ -4,7 +4,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib import messages  
 from django.db.models import Sum     
 from expenses.models import Expense  
-from users.forms import ExpenseForm  
+from expenses.forms import ExpenseForm
+from expenses.views import expense_create  
 
 
 # Create your views here.
@@ -33,20 +34,11 @@ def traveller_dashboard(request):
         'approved_count': user_expenses.filter(status='approved').count(),  
         'rejected_count': user_expenses.filter(status='rejected').count(),   
     }
-    
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            expense = form.save(commit=False)
-            expense.user_id = request.user
-            expense.status = "pending"  
-            expense.save()
-            messages.success(request, 'Expense added successfully!')
-            return redirect('users:traveller_dashboard')  
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = ExpenseForm()
+
+    # keep expense creation logic in the expenses app
+    is_expense_created, form = expense_create(request, request.user)
+    if is_expense_created:
+        return redirect('users:traveller_dashboard') 
     
     context = {
         'stats': stats,
