@@ -36,7 +36,7 @@ def traveller_dashboard(request):
     }
 
     # keep expense creation logic in the expenses app
-    is_expense_created, form = expense_create(request, request.user)
+    is_expense_created, form = expense_create(request)
     if is_expense_created:
         return redirect('users:traveller_dashboard') 
     
