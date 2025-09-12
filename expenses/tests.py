@@ -36,20 +36,20 @@ class ExpenseListViewTests(TestCase):
 
     def test_approver_sees_all_pending_expenses(self):
         self.client.force_login(self.boss)
-        response = self.client.get(reverse('expenses:expense_list_approver'))
+        response = self.client.get(reverse('users:approver_dashboard'))
         expenses_in_context = response.context['expenses']
         pending_count = Expense.objects.filter(status='pending').count()
         self.assertEqual(expenses_in_context.count(), pending_count)
     
     def test_approver_sees_all_processed_expenses(self):
         self.client.force_login(self.boss)
-        response = self.client.get(reverse('expenses:expense_list_approver'))
+        response = self.client.get(reverse('users:approver_dashboard'))
         expenses_in_context = response.context['expenses']
         pending_count = Expense.objects.filter(status__in=['approved', 'rejected']).count()
         self.assertEqual(expenses_in_context.count(), pending_count)
         
     def test_unauthenticated_user_redirected(self):
-        response = self.client.get(reverse('expenses:expense_list_approver'))
+        response = self.client.get(reverse('users:approver_dashboard'))
         self.assertEqual(response.status_code, 302)
         self.assertIn('/accounts/login/', response.url)
         
