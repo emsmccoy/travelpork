@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import views as auth_views
 from django.contrib import messages  
 from django.db.models import Sum     
@@ -23,10 +23,9 @@ def dashboard_redirect(request):
         return redirect('users:default_dashboard')
 
 @login_required
+@permission_required('users.can_access_traveller_dashboard')
 def traveller_dashboard(request):
-    user_expenses = Expense.objects.filter(user_id=request.user) # to retrieve the expense descriptions 
-    
-    # To show stats on the dashboard
+    user_expenses = Expense.objects.filter(user_id=request.user)
     stats = {
         'total_expenses': user_expenses.count(),
         'total_amount': user_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
@@ -39,21 +38,18 @@ def traveller_dashboard(request):
         request.user.save(update_fields=['session_data']) 
         for txt, tag in alerts:
             messages.info(request, txt, extra_tags=tag)
-
-    # keep expense creation logic in the expenses app
     is_expense_created, form = expense_create(request)
     if is_expense_created:
         return redirect('users:traveller_dashboard') 
-    
     context = {
         'stats': stats,
         'form': form,
         'user_expenses': user_expenses,  
     }
-    
     return render(request, 'dashboard/traveller_dashboard.html', context)
 
 @login_required
+@permission_required('users.can_access_approver_dashboard')
 def approver_dashboard(request):
     filter_type = request.GET.get('filter', 'new')
     all_expenses = Expense.objects.all()
@@ -76,7 +72,6 @@ def approver_dashboard(request):
         'stats': stats,
     }
     return render(request, 'dashboard/approver_dashboard.html', context)
-
 
 @login_required
 def default_dashboard(request):
