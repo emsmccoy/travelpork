@@ -34,6 +34,11 @@ def traveller_dashboard(request):
         'approved_count': user_expenses.filter(status='approved').count(),  
         'rejected_count': user_expenses.filter(status='rejected').count(),   
     }
+    alerts = request.user.session_data.pop('_alerts', [])
+    if alerts:
+        request.user.save(update_fields=['session_data']) 
+        for txt in alerts:
+            messages.info(request, txt)
 
     # keep expense creation logic in the expenses app
     is_expense_created, form = expense_create(request)

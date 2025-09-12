@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import JSONField 
 
 # Create your models here.
 class CustomUser(AbstractUser):
@@ -7,6 +8,7 @@ class CustomUser(AbstractUser):
     dob = models.DateField(blank=True, null=True)
     passport = models.CharField(max_length=10, blank=True, null=True)
     account_number = models.CharField(max_length=15, blank=True, null=True)
+    session_data = JSONField(default=dict, blank=True)
 
     def is_traveller(self):
         return self.groups.filter(name='Travellers').exists()
