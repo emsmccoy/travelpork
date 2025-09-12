@@ -1,67 +1,9 @@
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: var(--text-black);
-    line-height: 1.6;
-    background: var(--background-light);
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: var(--white);
-    border-bottom: 1px solid var(--border-gray);
-}
-
-.header-left h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.welcome-text {
-    color: var(--text-gray);
-    font-size: 0.875rem;
-}
-
-.btn {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    text-align: center;
-}
-
-.btn-primary {
-    background: var(--primary-pink);
-    color: var(--white);
-}
-
 .btn-primary:hover {
     background: var(--primary-pink-hover);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--shadow-pink);
-}
+} 
 
-  
 .dashboard-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -106,15 +48,16 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
+/* Leaving for now, in case we want more stats and info on the dashboard */
 
-.action-card-green {
+/* .action-card-green {
     background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
     border-color: #bbf7d0;
 }
 
 .action-card-green:hover {
     background: linear-gradient(135deg, #dcfce7, #d1fae5);
-}
+} */
 
 .action-card-pink {
     background: linear-gradient(135deg, #fdf2f8, #fce7f3);
@@ -124,7 +67,7 @@ body {
 .action-card-pink:hover {
     background: linear-gradient(135deg, #fce7f3, #fae8fa);
 }
-
+/* 
 .action-card-purple {
     background: linear-gradient(135deg, #faf5ff, #f3e8ff);
     border-color: #ddd6fe;
@@ -132,7 +75,7 @@ body {
 
 .action-card-purple:hover {
     background: linear-gradient(135deg, #f3e8ff, #ede9fe);
-}
+} */
 
 .action-card-orange {
     background: linear-gradient(135deg, #fff7ed, #fdf2f8);
@@ -203,14 +146,6 @@ body {
 
 .form-group.full-width {
     grid-column: 1 / -1;
-}
-
-label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-black);
-    margin-bottom: 0.25rem;
 }
 
 .quick-add-form-container input,
