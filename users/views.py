@@ -24,9 +24,7 @@ def dashboard_redirect(request):
 
 @login_required
 def traveller_dashboard(request):
-    user_expenses = Expense.objects.filter(user_id=request.user) # to retrieve the expense descriptions 
-    
-    # To show stats on the dashboard
+    user_expenses = Expense.objects.filter(user_id=request.user)
     stats = {
         'total_expenses': user_expenses.count(),
         'total_amount': user_expenses.aggregate(Sum('amount'))['amount__sum'] or 0,
@@ -44,13 +42,11 @@ def traveller_dashboard(request):
     is_expense_created, form = expense_create(request)
     if is_expense_created:
         return redirect('users:traveller_dashboard') 
-    
     context = {
         'stats': stats,
         'form': form,
         'user_expenses': user_expenses,  
     }
-    
     return render(request, 'dashboard/traveller_dashboard.html', context)
 
 @login_required
@@ -76,7 +72,6 @@ def approver_dashboard(request):
         'stats': stats,
     }
     return render(request, 'dashboard/approver_dashboard.html', context)
-
 
 @login_required
 def default_dashboard(request):
