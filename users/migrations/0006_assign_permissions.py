@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('users', '0005_customuser_session_data'),
-        ('expenses', '0004_expense_is_modified'),
+        ('expenses', '0005_alter_expense_options'),
     ]
 
     operations = [

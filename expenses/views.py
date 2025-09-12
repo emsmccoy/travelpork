@@ -6,7 +6,6 @@ from django.db.models import Sum
 
 # Create your views here.
 @login_required
-@permission_required('users.can_access_traveller_dashboard')
 def expense_create(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
