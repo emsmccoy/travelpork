@@ -100,6 +100,12 @@ def expense_update_approver(request, expense_id):
             expense.status = 'rejected'
         expense.approvers_comment = comment
         expense.save()
+        alert = (f'Your expense "{expense.description[:40]}" '
+                f'was {expense.status}.')
+        queue = expense.user_id.session_data.get('_alerts', [])
+        queue.append(alert)
+        expense.user_id.session_data['_alerts'] = queue
+        expense.user_id.save(update_fields=['session_data'])
         return redirect('users:approver_dashboard')
     context = {
         'expense': expense,
