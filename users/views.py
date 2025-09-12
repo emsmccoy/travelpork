@@ -37,8 +37,8 @@ def traveller_dashboard(request):
     alerts = request.user.session_data.pop('_alerts', [])
     if alerts:
         request.user.save(update_fields=['session_data']) 
-        for txt in alerts:
-            messages.info(request, txt)
+        for txt, tag in alerts:
+            messages.info(request, txt, extra_tags=tag)
 
     # keep expense creation logic in the expenses app
     is_expense_created, form = expense_create(request)
