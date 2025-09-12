@@ -1,5 +1,5 @@
 from django import forms
-from expenses.models import Expense
+from .models import Expense
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
