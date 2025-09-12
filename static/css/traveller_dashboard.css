@@ -25,6 +25,25 @@
     color: var(--text-gray);
     font-size: 1rem;
 }
+.dashboard-container .alert {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem ;
+}
+
+.dashboard-container .alert-approved {
+    background: #22c55e;
+    color: white;
+}
+
+.dashboard-container .alert-rejected {
+    background: #ef4444;
+    color: white;
+}
 
 .action-cards-grid {
     display: grid;
