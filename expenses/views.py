@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense
 from .forms import ExpenseForm
@@ -6,14 +6,7 @@ from django.db.models import Sum
 
 # Create your views here.
 @login_required
-def expense_list_traveller(request):
-    user = request.user
-    expenses = Expense.objects.filter(user_id=user)
-    context = {
-        'expenses': expenses,
-    }
-    return render(request, 'expenses/expense_list_traveller.html', context)
-
+@permission_required('users.can_access_traveller_dashboard')
 def expense_create(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
@@ -23,8 +16,20 @@ def expense_create(request):
             expense.status = "pending"
             expense.save()
             return True, ExpenseForm()
+        else:
+            return False, form
     else:
         return False, ExpenseForm()
+
+@login_required
+@permission_required('users.can_access_traveller_dashboard')
+def expense_list_traveller(request):
+    user = request.user
+    expenses = Expense.objects.filter(user_id=user)
+    context = {
+        'expenses': expenses,
+    }
+    return render(request, 'expenses/expense_list_traveller.html', context)
 
 @login_required
 def expense_detail(request, expense_id):
@@ -41,6 +46,7 @@ def expense_detail(request, expense_id):
     return render(request, 'expenses/expense_detail.html', context)
 
 @login_required
+@permission_required('expenses.can_edit_own_expense')
 def expense_edit_traveller(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     if expense.user_id != request.user or not request.user.is_traveller():
@@ -63,6 +69,7 @@ def expense_edit_traveller(request, expense_id):
     return render(request, 'expenses/expense_edit_traveller.html', context)
 
 @login_required
+@permission_required('expenses.can_approve_expense')
 def expense_update_approver(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     if not request.user.is_approver():
@@ -91,6 +98,7 @@ def expense_update_approver(request, expense_id):
     return render(request, 'expenses/expense_detail.html', context)
 
 @login_required
+@permission_required('expenses.can_edit_own_expense')
 def expense_delete(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     if not request.user.is_traveller() or expense.user_id != request.user:

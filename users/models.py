@@ -22,6 +22,6 @@ class CustomUser(AbstractUser):
     class Meta:
         ordering = ['last_name']
         permissions = [
-            ("can_access_traveller_dashboard", "Can access traveller dashboard"),
-            ("can_access_approver_dashboard", "Can access approver dashboard"),
+            ('can_access_traveller_dashboard', "Can access traveller dashboard"),
+            ('can_access_approver_dashboard', "Can access approver dashboard"),
         ]

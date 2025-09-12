@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import views as auth_views
 from django.contrib import messages  
 from django.db.models import Sum     
@@ -23,6 +23,7 @@ def dashboard_redirect(request):
         return redirect('users:default_dashboard')
 
 @login_required
+@permission_required('users.can_access_traveller_dashboard')
 def traveller_dashboard(request):
     user_expenses = Expense.objects.filter(user_id=request.user)
     stats = {
@@ -37,8 +38,6 @@ def traveller_dashboard(request):
         request.user.save(update_fields=['session_data']) 
         for txt, tag in alerts:
             messages.info(request, txt, extra_tags=tag)
-
-    # keep expense creation logic in the expenses app
     is_expense_created, form = expense_create(request)
     if is_expense_created:
         return redirect('users:traveller_dashboard') 
@@ -50,6 +49,7 @@ def traveller_dashboard(request):
     return render(request, 'dashboard/traveller_dashboard.html', context)
 
 @login_required
+@permission_required('users.can_access_approver_dashboard')
 def approver_dashboard(request):
     filter_type = request.GET.get('filter', 'new')
     all_expenses = Expense.objects.all()

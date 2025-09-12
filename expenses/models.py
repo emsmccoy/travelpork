@@ -35,7 +35,7 @@ class Expense(models.Model):
     class Meta:
         ordering = ['-submission_date']
         permissions = [
-            ("can_approve_expense", "Can approve or reject expenses"),
-            ("can_edit_own_expense", "Can edit own pending expenses"),
-            ("can_view_all_expenses", "Can view all expenses"),
+            ('can_approve_expense', "Can approve or reject expenses"),
+            ('can_edit_own_expense', "Can edit own pending expenses"),
+            ('can_view_all_expenses', "Can view all expenses"),
         ]
